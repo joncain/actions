@@ -27,4 +27,4 @@ jobs:
         id: run-tests
         run: |
           echo "pytest ."
-          echo "${{ needs.lint.outputs.black-results }}"
+          echo "${{ needs.lint.outputs.black-result }}"
