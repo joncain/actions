@@ -59,3 +59,4 @@ jobs:
           echo "lint result: ${{ needs.lint.outputs.lint-result }}"
           echo "test result: ${{ needs.test.outputs.test-result }}"
           echo "Building container for environment: ${{ needs.set-context.outputs.environment }}"
+          pip install -r requirements.txt
