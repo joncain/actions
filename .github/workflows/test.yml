@@ -5,7 +5,6 @@ on:
       - main
 env:
   FOO: bar
-  FOOBAR: "foo${{ FOO }}"
 
 permissions:
   contents: read
@@ -53,3 +52,7 @@ jobs:
           echo "lint result: ${{ steps.lint.outputs.lint-result }}"
           echo "test result: ${{ steps.run-tests.outputs.test-result }}"
           echo "Building container for environment: ${{ steps.set-context.outputs.environment }}"
+      - name: Condition Test
+        if: 1 == 0
+        run: echo "I SHOULD NOT RUN!!!!"
+
