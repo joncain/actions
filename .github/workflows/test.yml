@@ -22,6 +22,8 @@ jobs:
       - name: Set context
         id: context
         run: |
+          pwd
+          ls -l
           echo "Branch name: ${{ steps.extract-branch.outputs.branch-name }}"
           if [[ "${{ steps.extract-branch.outputs.branch-name }}" == "main" ]]; then
             echo "environment=dev" >> $GITHUB_OUTPUT
