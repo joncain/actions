@@ -38,9 +38,9 @@ jobs:
         run: |
           echo "black ."
           echo "lint-result=true" >> $GITHUB_OUTPUT
-      # - name: Install Dependencies
-      #   run: |
-      #     pip install -r requirements.txt
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
       - name: Run Tests
         id: run-tests
         run: |
