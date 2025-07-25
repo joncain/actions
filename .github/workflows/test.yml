@@ -22,8 +22,6 @@ jobs:
       - name: Set context
         id: context
         run: |
-          pwd
-          ls -l
           echo "Branch name: ${{ steps.extract-branch.outputs.branch-name }}"
           if [[ "${{ steps.extract-branch.outputs.branch-name }}" == "main" ]]; then
             echo "environment=dev" >> $GITHUB_OUTPUT
@@ -62,6 +60,8 @@ jobs:
       - name: Build Container
         id: build-container
         run: |
+          pwd
+          ls -l
           echo "lint result: ${{ needs.lint.outputs.lint-result }}"
           echo "test result: ${{ needs.test.outputs.test-result }}"
           echo "Building container for environment: ${{ needs.set-context.outputs.environment }}"
