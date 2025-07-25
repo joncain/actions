@@ -13,11 +13,13 @@ jobs:
       environment: ${{ steps.context.environment }}
     steps:
       - name: Extract branch name
-        run: echo "BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
+        id: extract-branch
+        run: echo "branch-name=${GITHUB_REF#refs/heads/}" >> $GITHUB_OUTPUT
       - name: Set context
         id: context
         run: |
-          if [[ "${{ github.ref }}" == "main" ]]; then
+          echo "Branch name: ${{ steps.extract-branch.branch-name }}"
+          if [[ "${{ steps.extract-branch.branch-name }}" == "main" ]]; then
             echo "environment=dev" >> $GITHUB_OUTPUT
           else
             echo "Unexpected branch name"
