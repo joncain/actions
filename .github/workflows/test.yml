@@ -49,7 +49,7 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
-    needs: [ set-context, lint ]
+    needs: [ set-context, test ]
     steps:
       - name: Build Container
         id: build-container
