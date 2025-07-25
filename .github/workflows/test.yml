@@ -1,1 +1,12 @@
 name: Test Workflow
+on:
+  push:
+    branches:
+      - main
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: exec-black
+        run: |
+          echo "black ."
