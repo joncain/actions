@@ -10,7 +10,7 @@ jobs:
   set-context:
     runs-on: ubuntu-latest
     outputs:
-      environment: ${{ steps.context.environment }}
+      environment: ${{ steps.context.outputs.environment }}
     steps:
       - name: Extract branch name
         id: extract-branch
