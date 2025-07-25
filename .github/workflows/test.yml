@@ -15,7 +15,8 @@ jobs:
       - name: Set context
         id: context
         run: |
-          if [[ ${{ github.ref }} == "main" ]]; then
+          echo "github.ref: ${{ github.ref }}"
+          if [[ "${{ github.ref }}" == "main" ]]; then
             echo "environment=dev" >> $GITHUB_OUTPUT
           else
             echo "Unexpected branch name"
