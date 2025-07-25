@@ -11,7 +11,7 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     outputs:
-      black-result: ${{ steps.exec-black.outputs.black-result
+      black-result: ${{ steps.exec-black.outputs.black-result }}
     steps:
       - name: Execute black
         id: exec-black
