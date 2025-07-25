@@ -6,12 +6,16 @@ on:
 env:
   FOO: bar
 
+permissions:
+  contents: read
+
 jobs:
-  set-context:
+  setup:
     runs-on: ubuntu-latest
     outputs:
       environment: ${{ steps.context.outputs.environment }}
     steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 #v4
       - name: Extract branch name
         id: extract-branch
         run: echo "branch-name=${GITHUB_REF#refs/heads/}" >> $GITHUB_OUTPUT
@@ -27,7 +31,7 @@ jobs:
           fi
   lint:
     runs-on: ubuntu-latest
-    needs: [ set-context ]
+    needs: [ setup ]
     outputs:
       lint-result: ${{ steps.exec-black.outputs.lint-result }}
     steps:
@@ -39,7 +43,7 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
-    needs: [ set-context, lint ]
+    needs: [ setup, lint ]
     outputs:
       test-result: ${{ steps.run-tests.outputs.test-result }}
     steps:
@@ -51,7 +55,7 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
-    needs: [ set-context, lint, test ]
+    needs: [ setup, lint, test ]
     steps:
       - name: Build Container
         id: build-container
