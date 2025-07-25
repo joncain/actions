@@ -5,6 +5,7 @@ on:
       - main
 env:
   FOO: bar
+  FOOBAR: "foo${{ FOO }}"
 
 permissions:
   contents: read
