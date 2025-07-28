@@ -6,6 +6,7 @@ on:
     inputs:
       foo:
         description: test param
+	type: string
 
 permissions:
   contents: read
