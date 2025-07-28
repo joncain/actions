@@ -57,5 +57,3 @@ jobs:
         run: echo "I SHOULD NOT RUN!!!!"
   call-reusable:
     uses: ./.github/workflows/reusable.yml
-    with:
-      foo: bar
