@@ -62,12 +62,13 @@ jobs:
         run: |
           echo "Before..."
           ls -al
+          stat ./.github/workflows/reusable.yml 
       - name: Checkout code
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 #v4
       - name: After
         run: |
           echo "After..."
-          ls -al
+          stat ./.github/workflows/reusable.yml 
       - uses: ./.github/workflows/reusable.yml
         with:
           foo: bar
