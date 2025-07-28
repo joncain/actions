@@ -55,6 +55,10 @@ jobs:
       - name: Condition Test
         if: 1 == 0
         run: echo "I SHOULD NOT RUN!!!!"
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
       - name: Call Reusable
         uses: ./.github/workflows/reusable.yml
         with:
