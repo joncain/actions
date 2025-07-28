@@ -58,3 +58,6 @@ jobs:
   call-reusable:
     needs: [ build ]
     uses: ./.github/workflows/reusable.yml
+    with:
+      foo: "bar"
+

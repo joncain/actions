@@ -3,7 +3,11 @@ on:
   workflow_dispatch:
     # manual
   workflow_call:
-    # pass
+    inputs:
+      foo:
+        description: Foo
+        type: string
+        required: true
 permissions:
   contents: read
 
