@@ -1,0 +1,23 @@
+name: Reusable Workflow
+on:
+  workflow_dispatch:
+    # manual
+  workflow_call:
+    inputs:
+      foo:
+        description: test param
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 #v4
+      - name: Debug 
+        run: |
+          echo "called..."
+          pwd
+          ls -al
