@@ -62,8 +62,8 @@ jobs:
             ACCOUNT_ID=$DEV_ACCOUNT_ID
           fi
 
-          CICD_ROLE="arn:aws:iam::${{ ACCOUNT_ID }}:role/${{ github.event.inputs.environment }}-${{ env.AWS_DEFAULT_REGION }}-foxes-cicd"
-          CDK_ROLE="arn:aws:iam::${{ ACCOUNT_ID }}:role/team-foxes-cdk"
+          CICD_ROLE="arn:aws:iam::$ACCOUNT_ID:role/${{ github.event.inputs.environment }}-${{ env.AWS_DEFAULT_REGION }}-foxes-cicd"
+          CDK_ROLE="arn:aws:iam::$ACCOUNT_ID:role/team-foxes-cdk"
 
           echo "account-id=$ACCOUNT_ID" >> $GITHUB_OUTPUT
           echo $GITHUB_OUTPUT
