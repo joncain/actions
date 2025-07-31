@@ -3,8 +3,6 @@ on:
   push:
     branches:
       - main
-  workflow_dispatch:
-    # pass
 env:
   FOO: bar
 
@@ -20,10 +18,9 @@ jobs:
     steps:
       - name: Variables
         run: |
-          MYVAR="myval"
+          MYVAR="I can assign and use an uninitialized variable"
           echo $MYVAR
           echo "myvar=$MYVAR" >> $GITHUB_OUTPUT
-          echo $GITHUB_OUTPUT
       - name: Extract branch name
         id: extract-branch
         run: echo "branch-name=${GITHUB_REF#refs/heads/}" >> $GITHUB_OUTPUT
