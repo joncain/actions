@@ -37,32 +37,32 @@ jobs:
 
       - name: validate inputs and determine AWS role
         id: validate-parse
-        env:
-          DEV_ACCOUNT_ID: "D"
-          STAGING_ACCOUNT_ID: "S"
-          PROD_ACCOUNT_ID: "P"
+        # env:
+        #   DEV_ACCOUNT_ID: "D"
+        #   STAGING_ACCOUNT_ID: "S"
+        #   PROD_ACCOUNT_ID: "P"
         run: |
 
-          # Validate environment
-          if [[ ! "${{ github.event.inputs.environment }}" =~ ^(dev|staging|prod)$ ]]; then
-            echo "Error: Environment must be dev, staging, or prod"
-            exit 1
-          fi
+          # # Validate environment
+          # if [[ ! "${{ github.event.inputs.environment }}" =~ ^(dev|staging|prod)$ ]]; then
+          #   echo "Error: Environment must be dev, staging, or prod"
+          #   exit 1
+          # fi
 
-          # Validate stack
-          if [[ ! "${{ github.event.inputs.stack }}" =~ ^(ObjectStorage|AssetAi|Scythe)$ ]]; then
-            echo "Error: Stack must be ObjectStorage, AssetAi, or Scythe"
-            exit 1
-          fi
+          # # Validate stack
+          # if [[ ! "${{ github.event.inputs.stack }}" =~ ^(ObjectStorage|AssetAi|Scythe)$ ]]; then
+          #   echo "Error: Stack must be ObjectStorage, AssetAi, or Scythe"
+          #   exit 1
+          # fi
 
-          # Determine AWS role based on environment
-          if [[ "${{ github.event.inputs.environment }}" == "prod" ]]; then
-            echo "account-id=$PROD_ACCOUNT_ID" >> $GITHUB_OUTPUT
-          elif [[ "${{ github.event.inputs.environment }}" == "staging" ]]; then
-            echo "account-id=$STAGING_ACCOUNT_ID" >> $GITHUB_OUTPUT
-          else
-            echo "account-id=$DEV_ACCOUNT_ID" >> $GITHUB_OUTPUT
-          fi
+          # # Determine AWS role based on environment
+          # if [[ "${{ github.event.inputs.environment }}" == "prod" ]]; then
+          #   echo "account-id=$PROD_ACCOUNT_ID" >> $GITHUB_OUTPUT
+          # elif [[ "${{ github.event.inputs.environment }}" == "staging" ]]; then
+          #   echo "account-id=$STAGING_ACCOUNT_ID" >> $GITHUB_OUTPUT
+          # else
+          #   echo "account-id=$DEV_ACCOUNT_ID" >> $GITHUB_OUTPUT
+          # fi
 
           # CICD_ROLE="arn:aws:iam::${{ ACCOUNT_ID }}:role/${{ github.event.inputs.environment }}-${{ env.AWS_DEFAULT_REGION }}-foxes-cicd"
           # CDK_ROLE="arn:aws:iam::${{ ACCOUNT_ID }}:role/team-foxes-cdk"
