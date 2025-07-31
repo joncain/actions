@@ -104,7 +104,7 @@ jobs:
             DEPLOY_CMD="$DEPLOY_CMD --bootstrap"
           fi
 
-          echo "Deploying ${{ github.event.inputs.stack }} to ${{ github.events.input.environment }} environment"
+          echo "Deploying ${{ github.event.inputs.stack }} to ${{ github.event.input.environment }} environment"
           echo "Using AWS role: ${{ steps.validate-parse.outputs.cdk-role }}"
           echo "Executing: $DEPLOY_CMD"
           #$DEPLOY_CMD
