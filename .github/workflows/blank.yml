@@ -1,0 +1,112 @@
+name: Deploy Infra
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'The environmant to deploy to. dev|staging|prod'
+        required: true
+      stack:
+        description: 'The stack to deploy. ObjectStorage|AssetAi|Scythe'
+        required: true
+      bootstrap:
+        description: 'Bootstrap CDK'
+        required: false
+        type: boolean
+        default: false
+      context:
+        description: 'Additional context to pass to the deploy command'
+        required: false
+        type: string
+        default: ''
+
+env:
+  AWS_DEFAULT_REGION: "us-west-1"
+
+permissions:
+  id-token: write
+  contents: read
+  packages: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 #v4
+
+      - name: validate inputs and determine AWS role
+        id: validate-parse
+        env:
+          DEV_ACCOUNT_ID: "D"
+          STAGING_ACCOUNT_ID: "S"
+          PROD_ACCOUNT_ID: "P"
+        run: |
+
+          # Validate environment
+          if [[ ! "${{ github.event.inputs.environment }}" =~ ^(dev|staging|prod)$ ]]; then
+            echo "Error: Environment must be dev, staging, or prod"
+            exit 1
+          fi
+
+          # Validate stack
+          if [[ ! "${{ github.event.inputs.stack }}" =~ ^(ObjectStorage|AssetAi|Scythe)$ ]]; then
+            echo "Error: Stack must be ObjectStorage, AssetAi, or Scythe"
+            exit 1
+          fi
+
+          # Determine AWS role based on environment
+          if [[ "${{ github.event.inputs.environment }}" == "prod" ]]; then
+            echo "account-id=$PROD_ACCOUNT_ID" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.event.inputs.environment }}" == "staging" ]]; then
+            echo "account-id=$STAGING_ACCOUNT_ID" >> $GITHUB_OUTPUT
+          else
+            echo "account-id=$DEV_ACCOUNT_ID" >> $GITHUB_OUTPUT
+          fi
+
+          # CICD_ROLE="arn:aws:iam::${{ ACCOUNT_ID }}:role/${{ github.event.inputs.environment }}-${{ env.AWS_DEFAULT_REGION }}-foxes-cicd"
+          # CDK_ROLE="arn:aws:iam::${{ ACCOUNT_ID }}:role/team-foxes-cdk"
+
+          # Set outputs
+          # echo "cicd-role=$CICD_ROLE" >> $GITHUB_OUTPUT
+          # echo "cdk-role=$CDK_ROLE" >> $GITHUB_OUTPUT
+          # echo "role-session-name=${{ github.event.inputs.environment }}-${{ github.event.inputs.stack }}-deployment" >> $GITHUB_OUTPUT
+          echo $GITHUB_OUTPUT
+      # - name: Configure AWS credentials from appropriate account
+      #   id: credentials
+      #   uses: aws-actions/configure-aws-credentials@b47578312673ae6fa5b5096b330d9fbac3d116df #v4
+      #   with:
+      #     role-to-assume: ${{ steps.validate-parse.outputs.cicd-role }}
+      #     role-session-name: ${{ steps.validate-parse.outputs.role-session-name }}
+      #     output-credentials: true
+
+      # - name: Assume CDK role
+      #   uses: aws-actions/configure-aws-credentials@b47578312673ae6fa5b5096b330d9fbac3d116df #v4
+      #   with:
+      #     role-session-name: ${{ steps.validate-parse.outputs.role-session-name }}
+      #     role-to-assume: ${{ steps.validate-parse.outputs.cdk-role }}
+      #     role-chaining: true
+
+      # - name: Deploy Stack
+      #   env:
+      #     CDK_DEFAULT_ACCOUNT: ${{ steps.validate-parse.outputs.account-id }}
+      #     CDK_DEFAULT_REGION: ${{ env.AWS_DEFAULT_REGION }}
+      #   run: |
+      #     DEPLOY_CMD="./deploy \
+      #       --env ${{ github.event.inputs.environment }} \
+      #       --stack ${{ github.event.inputs.stack }}"
+
+      #     if [[ -n "${{ github.event.inputs.context }}" ]]; then
+      #       DEPLOY_CMD="$DEPLOY_CMD --context ${{ github.event.inputs.context }}"
+      #     fi
+
+      #     if [[ "${{ github.event.inputs.bootstrap }}" == "true" ]]; then
+      #       DEPLOY_CMD="$DEPLOY_CMD --bootstrap"
+      #     fi
+
+      #     cdk doctor
+
+      #     echo "Deploying ${{ github.event.inputs.stack }} to ${{ github.event.inputs.environment }} environment"
+      #     echo "Using AWS role: ${{ steps.validate-parse.outputs.cdk-role }}"
+      #     echo "Executing: $DEPLOY_CMD"
+      #     #$DEPLOY_CMD
