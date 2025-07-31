@@ -16,6 +16,7 @@ jobs:
       - name: Variables
         run: |
           MYVAR="myval"
+          echo $MYVAR
           echo "myvar=$MYVAR" >> $GITHUB_OUTPUT
           echo $GITHUB_OUTPUT
       - name: Extract branch name
