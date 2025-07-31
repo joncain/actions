@@ -55,11 +55,11 @@ jobs:
 
           # Determine AWS role based on environment
           if [[ "${{ github.event.inputs.environment }}" == "prod" ]]; then
-            echo "PROD"
+            FOO=$PROD
           elif [[ "${{ github.event.inputs.environment }}" == "staging" ]]; then
-            echo "STAGING"
+            FOO=$STAGING
           else
-            echo "DEV"
+            FOO=$DEV
           fi
 
-
+          echo "FOO=$FOO" >> $GITHUB_OUTPUT
