@@ -37,4 +37,10 @@ jobs:
       - name: validate inputs and determine AWS role
         id: validate-parse
         run: |
-          echo "FOO"
+          # Validate environment
+          if [[ ! "${{ github.event.inputs.environment }}" =~ ^(dev|staging|prod)$ ]]; then
+            echo "Error: Environment must be dev, staging, or prod"
+            exit 1
+          fi
+
+
