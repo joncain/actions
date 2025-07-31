@@ -37,9 +37,9 @@ jobs:
       - name: validate inputs and determine AWS role
         id: validate-parse
         env:
-          DEV: "D"
-          STAGING: "S"
-          PROD: "P"
+          DEV_ACCOUNT_ID: "D"
+          STAGING_ACCOUNT_ID: "S"
+          PROD_ACCOUNT_ID: "P"
         run: |
           # Validate environment
           if [[ ! "${{ github.event.inputs.environment }}" =~ ^(dev|staging|prod)$ ]]; then
@@ -55,11 +55,12 @@ jobs:
 
           # Determine AWS role based on environment
           if [[ "${{ github.event.inputs.environment }}" == "prod" ]]; then
-            FOO=$PROD
+            ACCOUNT_ID=$PROD_ACCOUNT_ID
           elif [[ "${{ github.event.inputs.environment }}" == "staging" ]]; then
-            FOO=$STAGING
+            ACCOUNT_ID=$STAGING_ACCOUNT_ID
           else
-            FOO=$DEV
+            ACCOUNT_ID=$DEV_ACCOUNT_ID
           fi
 
-          echo "FOO=$FOO" >> $GITHUB_OUTPUT
+          echo "account-id=$ACCOUNT_ID" >> $GITHUB_OUTPUT
+          echo $GITHUB_OUTPUT
