@@ -36,6 +36,10 @@ jobs:
 
       - name: validate inputs and determine AWS role
         id: validate-parse
+        env:
+          DEV: "D"
+          STAGING: "S"
+          PROD: "P"
         run: |
           # Validate environment
           if [[ ! "${{ github.event.inputs.environment }}" =~ ^(dev|staging|prod)$ ]]; then
