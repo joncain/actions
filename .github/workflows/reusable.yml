@@ -24,6 +24,4 @@ jobs:
       - name: Debug 
         run: |
           echo "called..."
-          echo "foo=${{github.event.inputs.foo}}"
-          pwd
-          ls -al
+          echo "foo=${{ inputs.foo }}"
