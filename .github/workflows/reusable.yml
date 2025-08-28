@@ -1,7 +1,11 @@
 name: Reusable Workflow
 on:
   workflow_dispatch:
-    # manual
+    inputs:
+      foo:
+        description: Foo
+        type: string
+        required: true
   workflow_call:
     inputs:
       foo:
