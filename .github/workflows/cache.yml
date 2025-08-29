@@ -26,3 +26,7 @@ jobs:
         id: root-level-deps
         run: |
           pip install -r requirements.txt
+      - name: Install nested deps
+        id: nested-deps
+        run: |
+          pip install -r one/two/requirements.txt
