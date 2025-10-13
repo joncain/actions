@@ -4,8 +4,11 @@ on:
     branches:
       - main
   workflow_dispatch:
-    # pass
-
+    inputs:
+      environment:
+        description: The environment to deploy to. E.g. dev|staging|prod
+        type: string
+        required: true
 env:
   FOO: bar
 
@@ -64,11 +67,12 @@ jobs:
           echo "test result: ${{ steps.run-tests.outputs.test-result }}"
           echo "Building container for environment: ${{ steps.set-context.outputs.environment }}"
       - name: Condition Test
-        if: 1 == 0
-        run: echo "I SHOULD NOT RUN!!!!"
+        if: 1 == 1
+        run: echo "I SHOULD RUN!!!!"
   call-reusable:
     needs: [ build ]
     uses: ./.github/workflows/reusable.yml
     with:
       foo: "bar"
+      environment: "dev"
 
