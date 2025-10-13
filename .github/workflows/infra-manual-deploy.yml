@@ -60,7 +60,6 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./infra
         shell: bash
     steps:
       - name: checkout
@@ -82,24 +81,24 @@ jobs:
             exit 1
           fi
 
-      - name: Deploy Stack
-        env:
-          CDK_DEFAULT_ACCOUNT: ${{ steps.validate-parse.outputs.account-id }}
-          CDK_DEFAULT_REGION: ${{ env.AWS_REGION }}
-        run: |
-          DEPLOY_CMD="./deploy \
-            --env ${{ inputs.environment }} \
-            --stack ${{ inputs.stack }}"
+      # - name: Deploy Stack
+      #   env:
+      #     CDK_DEFAULT_ACCOUNT: ${{ steps.validate-parse.outputs.account-id }}
+      #     CDK_DEFAULT_REGION: ${{ env.AWS_REGION }}
+      #   run: |
+      #     DEPLOY_CMD="./deploy \
+      #       --env ${{ inputs.environment }} \
+      #       --stack ${{ inputs.stack }}"
 
-          if [[ -n "${{ inputs.context }}" ]]; then
-            DEPLOY_CMD="$DEPLOY_CMD --context ${{ inputs.context }}"
-          fi
+      #     if [[ -n "${{ inputs.context }}" ]]; then
+      #       DEPLOY_CMD="$DEPLOY_CMD --context ${{ inputs.context }}"
+      #     fi
 
-          if [[ "${{ inputs.bootstrap }}" == "true" ]]; then
-            DEPLOY_CMD="$DEPLOY_CMD --bootstrap"
-          fi
+      #     if [[ "${{ inputs.bootstrap }}" == "true" ]]; then
+      #       DEPLOY_CMD="$DEPLOY_CMD --bootstrap"
+      #     fi
 
-          echo "${{ DEPLOY_CMD }}"
-          echo "Using AWS role: ${{ steps.validate-parse.outputs.cdk-role }}"
-          echo "Executing: $DEPLOY_CMD"
-          $DEPLOY_CMD
+      #     echo "${{ DEPLOY_CMD }}"
+      #     echo "Using AWS role: ${{ steps.validate-parse.outputs.cdk-role }}"
+      #     echo "Executing: $DEPLOY_CMD"
+      #     $DEPLOY_CMD
