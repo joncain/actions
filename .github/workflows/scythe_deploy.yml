@@ -1,0 +1,28 @@
+name: Deploy Scythe
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: The environment to deploy to. E.g. dev|staging|prod
+        type: string
+        required: true
+      bootstrap:
+        description: Bootstrap CDK
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  id-token: write
+  contents: read
+  packages: read
+
+jobs:
+  deploy:
+    uses: ./.github/workflows/infra-manual-deploy.yml
+    with:
+      environment: "${{ inputs.environment }}" # Use outputs because environment can be derived from the branch name
+      stack: "Scythe"
+      context: "scythe-image-tag=${{ github.sha }}"
+      bootstrap: ${{ inputs.bootstrap }}
