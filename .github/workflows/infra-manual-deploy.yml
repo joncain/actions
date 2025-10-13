@@ -69,6 +69,9 @@ jobs:
         id: validate-parse
         run: |
 
+          echo "${{ inputs }}"
+          echo "${{ github.event.inputs }}"
+
           # Validate environment
           if [[ ! "${{ inputs.environment }}" =~ ^(dev|staging|prod)$ ]]; then
             echo "Error: Environment must be dev, staging, or prod"
