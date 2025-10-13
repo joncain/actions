@@ -1,0 +1,105 @@
+name: Deploy Infra
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: The environment to deploy to
+        type: choice
+        required: true
+        options:
+          - dev
+          - staging
+          - prod
+      stack:
+        description: The stack to deploy
+        type: choice
+        required: true
+        options:
+          - ObjectStorage
+          - AssetAi
+          - Scythe
+          - SnowflakeMonitor
+          - DatabaseAnonymization
+      context:
+        description: CSV key/value pairs to add/override CDK context. e.g. scythe-image-tag=latest,foo=bar
+        type: string
+        required: false
+      bootstrap:
+        description: Bootstrap CDK
+        required: false
+        type: boolean
+        default: false
+  workflow_call:
+    inputs:
+      environment:
+        description: The environment to deploy to. E.g. dev|staging|prod
+        type: string
+        required: true
+      stack:
+        description: The stack to deploy. E.g. ObjectStorage|AssetAi|Scythe|SnowflakeMonitor|DatabaseAnonymization
+        type: string
+        required: true
+      context:
+        description: CSV key/value pairs to add/override CDK context. E.g. scythe-image-tag=latest,foo=bar
+        type: string
+        required: false
+      bootstrap:
+        description: Bootstrap CDK
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  id-token: write
+  contents: read
+  packages: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./infra
+        shell: bash
+    steps:
+      - name: checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 #v4
+
+      - name: validate inputs and determine AWS role
+        id: validate-parse
+        run: |
+
+          # Validate environment
+          if [[ ! "${{ inputs.environment }}" =~ ^(dev|staging|prod)$ ]]; then
+            echo "Error: Environment must be dev, staging, or prod"
+            exit 1
+          fi
+
+          # Validate stack
+          if [[ ! "${{ github.event.inputs.stack }}" =~ ^(ObjectStorage|AssetAi|Scythe|SnowflakeMonitor|DatabaseAnonymization)$ ]]; then
+            echo "Error: Stack must be ObjectStorage, AssetAi, Scythe, SnowflakeMonitor, or DatabaseAnonymization"
+            exit 1
+          fi
+
+      - name: Deploy Stack
+        env:
+          CDK_DEFAULT_ACCOUNT: ${{ steps.validate-parse.outputs.account-id }}
+          CDK_DEFAULT_REGION: ${{ env.AWS_REGION }}
+        run: |
+          DEPLOY_CMD="./deploy \
+            --env ${{ inputs.environment }} \
+            --stack ${{ inputs.stack }}"
+
+          if [[ -n "${{ inputs.context }}" ]]; then
+            DEPLOY_CMD="$DEPLOY_CMD --context ${{ inputs.context }}"
+          fi
+
+          if [[ "${{ inputs.bootstrap }}" == "true" ]]; then
+            DEPLOY_CMD="$DEPLOY_CMD --bootstrap"
+          fi
+
+          echo "${{ DEPLOY_CMD }}"
+          echo "Using AWS role: ${{ steps.validate-parse.outputs.cdk-role }}"
+          echo "Executing: $DEPLOY_CMD"
+          $DEPLOY_CMD
