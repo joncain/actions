@@ -38,7 +38,7 @@ jobs:
           echo "called..."
           echo "foo=${{ inputs.foo }}"
           # Validate stack
-          if [[ ! "${{ inputs.environment }}" =~ ^(dev|staging|prod)$ ]]; then
+          if [[ ! "${{ github.event.inputs.environment }}" =~ ^(dev|staging|prod)$ ]]; then
             echo "Error: environment must be dev, staging, or prod"
             exit 1
           fi
