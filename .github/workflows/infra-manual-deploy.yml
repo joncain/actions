@@ -76,7 +76,7 @@ jobs:
           fi
 
           # Validate stack
-          if [[ ! "${{ github.event.inputs.stack }}" =~ ^(ObjectStorage|AssetAi|Scythe|SnowflakeMonitor|DatabaseAnonymization)$ ]]; then
+          if [[ ! "${{ inputs.stack }}" =~ ^(ObjectStorage|AssetAi|Scythe|SnowflakeMonitor|DatabaseAnonymization)$ ]]; then
             echo "Error: Stack must be ObjectStorage, AssetAi, Scythe, SnowflakeMonitor, or DatabaseAnonymization"
             exit 1
           fi
