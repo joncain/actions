@@ -1,0 +1,29 @@
+name: matrix test
+on:
+  workflow_dispatch:
+
+jobs:
+  # define-matrix:
+  #   runs-on: ubuntu-latest
+
+  #   outputs:
+  #     colors: ${{ steps.colors.outputs.colors }}
+
+  #   steps:
+  #     - name: Define Colors
+  #       id: colors
+  #       run: |
+  #         echo 'colors=["red", "green", "blue"]' >> "$GITHUB_OUTPUT"
+
+  my-job:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        environment: ["prod-us", "prod-eu"]
+
+    steps:
+      - name: Deploy
+        env:
+          environment: ${{ matrix.environment }}
+        run: |
+          echo "$environment"
