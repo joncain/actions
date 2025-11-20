@@ -20,7 +20,7 @@ jobs:
       - name: Adjust vars
         id: env
         run: |
-          if [[ ${{ inputs.environment == "stage"}} ]]; then
+          if [[ ${{ inputs.environment }} == "stage" ]]; then
             echo "Set REGION for stage"
             echo "REGION=us-west-2" >> $GITHUB_ENV
           fi
