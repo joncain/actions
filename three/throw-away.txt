@@ -1,1 +1,2 @@
 some file that will be removed during git-filter-repo operation
+Do some more stuff to add history
